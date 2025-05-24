@@ -4,6 +4,7 @@ This mod adds new jokers, enhancements, tarots and spectral cards to balatro. I'
 Smods is required!
 
 Credits to Cryptid, Bunco and Pokermon for their help with the code.
+
 *Disclaimer*
 I've played some of these mods and might have taken some inspiration from them, I did not copy anything, and if there is a problem with the devs of those other mods I will take mine down or make some adjustments. I did get some help from looking at their code to figure out a few thing I couldn't solve myself.
 
