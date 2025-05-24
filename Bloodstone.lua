@@ -1869,5 +1869,24 @@ SMODS.Joker:take_ownership('certificate', -- certificate doesn't work for some r
     true
 )
 
+function CardArea:change_size(delta)
+    if delta ~= 0 then 
+        G.E_MANAGER:add_event(Event({
+            func = function() 
+                self.config.real_card_limit = (self.config.real_card_limit or self.config.card_limit) + delta
+                self.config.card_limit = math.max(0, self.config.real_card_limit)
+                if delta > 0 and #G.hand.cards < self.config.real_card_limit and self.config.real_card_limit > 1 and self == G.hand and self.cards[1] and (G.STATE == G.STATES.DRAW_TO_HAND or G.STATE == G.STATES.SELECTING_HAND) then 
+                    local card_count = math.abs(delta)
+                    for i=1, card_count do
+                        draw_card(G.deck,G.hand, i*100/card_count,nil, nil , nil, 0.07)
+                        G.E_MANAGER:add_event(Event({func = function() self:sort() return true end}))
+                    end
+                end
+                if self == G.hand then check_for_unlock({type = 'min_hand_size'}) end
+        return true
+        end}))
+    end
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
