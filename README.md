@@ -21,6 +21,9 @@ Electric Box
 Super Charged Blueprint,
 Safe,
 Trident Joker,
+Lightningstone,
+Seastone,
+Plasmastone,
 Time Joker
 
 Tarots:

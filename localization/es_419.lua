@@ -22,6 +22,7 @@ return {
             bldstn_angel_text = 'Ángel',
             bldstn_copycat_text = 'Imitador',
             bldstn_keep_text = 'Guardar',
+            bldstn_free_reroll = '+1 Reintento Gratis',
         },
     },
     descriptions = {
@@ -135,6 +136,29 @@ return {
                     'Se reduce en {C:red}1{}',
                     'después de jugar una mano',
                     '{C:inactive}(se reinicia al final de la ronda)',
+                },
+            },
+            j_bldstn_lightningstonejoker = {
+                name = 'Piedra Rayo',
+                text = {
+                    'Al final de la ronda {C:green}1 en #2#{}',
+                    'probabilidad de ganar {C:money}'.. localize('$') .. '#1#',
+                },
+            },
+            j_bldstn_seastonejoker = {
+                name = 'Piedra Marina',
+                text = {
+                    '{C:green}1 en #2#{} de ganar {C:chips}+#1#{} Fichas',
+                    'cuando se anota un {C:clubs}Trébol{}'
+                },
+            },
+            j_bldstn_plasmastonejoker = {
+                name = 'Piedra Plasma',
+                text = {
+                    'Cada {C:attention}2{} Reintentos hay',
+                    'una probabilidad de {C:green}1 en #2#{} de ganar',
+                    '{C:attention}1{} {C:green}Reintento{} gratis',
+                    '{C:inactive}(#1#/2 Reintentos)'
                 },
             },
         },

@@ -22,6 +22,7 @@ return {
             bldstn_angel_text = 'Engel',
             bldstn_copycat_text = 'Kopieerkat',
             bldstn_keep_text = 'Bewaren',
+            bldstn_free_reroll = '+1 Gratis Herrol',
         },
     },
     descriptions = {
@@ -134,6 +135,29 @@ return {
                     'Vermindert met {C:red}1{}',
                     'na het spelen van een hand',
                     '{C:inactive}(reset aan het einde van de ronde)',
+                },
+            },
+            j_bldstn_lightningstonejoker = {
+                name = 'Bliksemsteen',
+                text = {
+                    'Aan het einde van de ronde {C:green}1 op #2#{}',
+                    'kans om {C:money}'.. localize('$') .. '#1# te krijgen',
+                },
+            },
+            j_bldstn_seastonejoker = {
+                name = 'Zee steen',
+                text = {
+                    '{C:green}1 op #2#{} kans om {C:chips}+#1#{} Chips te krijgen',
+                    'wanneer {C:clubs}Klavers{} wordt gescoord'
+                },
+            },
+            j_bldstn_plasmastonejoker = {
+                name = 'Plasmasteen',
+                text = {
+                    'Elke {C:attention}2{} Herrollen is er',
+                    'een {C:green}1 op #2#{} kans om te krijgen',
+                    '{C:attention}1{} gratis {C:green}Herrol',
+                    '{C:inactive}(#1#/2 Herrollen)'
                 },
             },
         },

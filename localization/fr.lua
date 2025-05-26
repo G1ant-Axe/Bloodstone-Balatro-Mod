@@ -22,6 +22,7 @@ return {
             bldstn_angel_text = 'Ange',
             bldstn_copycat_text = 'Copieur',
             bldstn_keep_text = 'Garder',
+            bldstn_free_reroll = '+1 Relance Gratuite',
         },
     },
     descriptions = {
@@ -134,6 +135,29 @@ return {
                     'Réduit de {C:red}1{}',
                     'après avoir joué une main',
                     '{C:inactive}(Réinitialisé à la fin du tour)',
+                },
+            },
+            j_bldstn_lightningstonejoker = {
+                name = 'Pierre Foudre',
+                text = {
+                    'À la fin du tour, {C:green}1 sur #2#{}',
+                    'chance de gagner {C:money}'.. localize('$') .. '#1#',
+                },
+            },
+            j_bldstn_seastonejoker = {
+                name = 'Pierre Marine',
+                text = {
+                    '{C:green}1 sur #2#{} de gagner {C:chips}+#1#{} Jetons',
+                    'quand un {C:clubs}Trèfle{} est comptabilisé'
+                },
+            },
+            j_bldstn_plasmastonejoker = {
+                name = 'Pierre Plasma',
+                text = {
+                    'Toutes les {C:attention}2{} Relances, il y a',
+                    'une chance de {C:green}1 sur #2#{} de gagner',
+                    '{C:attention}1{} {C:green}Relance{} gratuite',
+                    '{C:inactive}(#1#/2 Relances)'
                 },
             },
         },

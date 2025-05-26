@@ -1718,7 +1718,7 @@ SMODS.Joker{
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = false,
-    pos = {x = 5, y = 3},
+    pos = {x = 4, y = 3},
     config = {
       extra = {
           activetext = localize('k_inactive_text'),
@@ -1772,7 +1772,7 @@ SMODS.Joker{
     eternal_compat = false,
     perishable_compat = false,
     no_collection = true,
-    pos = {x = 6, y = 3},
+    pos = {x = 5, y = 3},
     in_pool = function(self,wawa,wawa2)
         return false
     end,
@@ -1787,7 +1787,7 @@ SMODS.Joker{
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
-    pos = {x = 7, y = 3},
+    pos = {x = 6, y = 3},
     config = {
       extra = {
           xtra_mult = 3,
@@ -1816,6 +1816,116 @@ SMODS.Joker{
                 message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.xtra_mult}},
                 colour = G.C.MULT
             }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Lightningstone
+SMODS.Joker{
+    key = 'lightningstonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 7, y = 3},
+    config = {
+      extra = {
+          money = 15,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.money,center.ability.extra.chance,},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if pseudorandom('lightningstone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.end_of_round and context.cardarea == G.jokers then
+            return{
+                dollars = card.ability.extra.money
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Seastone
+SMODS.Joker{
+    key = 'seastonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 8, y = 3},
+    config = {
+      extra = {
+          chips = 100,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.chips,center.ability.extra.chance,},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if pseudorandom('seastone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.individual and context.cardarea == G.play and context.other_card:is_suit("Clubs") then
+            return{
+                chips = card.ability.extra.chips
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Plasmastone
+SMODS.Joker{
+    key = 'plasmastonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 9, y = 3},
+    config = {
+      extra = {
+          rerolls = 0,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.rerolls,center.ability.extra.chance,},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if context.reroll_shop then
+            if card.ability.extra.rerolls >= 1 then
+                if pseudorandom('plasmastone') < G.GAME.probabilities.normal/card.ability.extra.chance then
+                    G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+                    calculate_reroll_cost(true)
+                    card:juice_up()
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = G.localization.misc.dictionary.bldstn_free_reroll, colour = G.C.GREEN})
+                end
+                card.ability.extra.rerolls = 0
+            elseif card.ability.extra.rerolls < 2 then
+                card.ability.extra.rerolls = card.ability.extra.rerolls + 1
+            end
         end
     end,
     in_pool = function(self,wawa,wawa2)

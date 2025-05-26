@@ -22,6 +22,7 @@ return {
             bldstn_angel_text = 'Ангел',
             bldstn_copycat_text = 'Копия',
             bldstn_keep_text = 'Оставить',
+            bldstn_free_reroll = '+1 бесплатный переброс',
         },
     },
     descriptions = {
@@ -134,6 +135,29 @@ return {
                     'Уменьшается на {C:red}1{}',
                     'после игры руки',
                     '{C:inactive}(Сброс в конце раунда)',
+                },
+            },
+            j_bldstn_lightningstonejoker = {
+                name = 'Грозовой Камень',
+                text = {
+                    'В конце раунда шанс {C:green}1 из #2#{}',
+                    'получить {C:money}'.. localize('$') .. '#1#',
+                },
+            },
+            j_bldstn_seastonejoker = {
+                name = 'Морской Камень',
+                text = {
+                    '{C:green}1 из #2#{} шанс получить {C:chips}+#1#{} фишек',
+                    'при наборе {C:clubs}Треф{}'
+                },
+            },
+            j_bldstn_plasmastonejoker = {
+                name = 'Плазменный Камень',
+                text = {
+                    'Каждые {C:attention}2{} переброса есть',
+                    '{C:green}1 из #2#{} шанс получить',
+                    '{C:attention}1{} бесплатный {C:green}переброс',
+                    '{C:inactive}(#1#/2 перебросов)'
                 },
             },
         },

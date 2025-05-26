@@ -20,6 +20,7 @@ return {
             bldstn_angel_text = 'Angel',
             bldstn_copycat_text = 'Copycat',
             bldstn_keep_text = 'Keep',
+            bldstn_free_reroll = '+1 Free Reroll',
         },
     },
     descriptions = {
@@ -133,6 +134,29 @@ return {
                     'Reduces by {C:red}1{}',
                     'after playing a hand',
                     '{C:inactive}(reset at end of round)',
+                },
+            },
+            j_bldstn_lightningstonejoker = {
+                name = 'Lightningstone',
+                text = {
+                    'At end of round {C:green}1 in #2#{}',
+                    'chance to gain {C:money}'.. localize('$') .. '#1#',
+                },
+            },
+            j_bldstn_seastonejoker = {
+                name = 'Seastone',
+                text = {
+                    '{C:green}1 in #2#{} to gain {C:chips}+#1#{} Chips',
+                    'when {C:clubs}Clubs{} is scored'
+                },
+            },
+            j_bldstn_plasmastonejoker = {
+                name = 'Plasmastone',
+                text = {
+                    'Every {C:attention}2{} Rerolls there is',
+                    'a {C:green}1 in #2#{} chance to gain',
+                    '{C:attention}1{} free {C:green}Reroll',
+                    '{C:inactive}(#1#/2 Rerolls)'
                 },
             },
         },
