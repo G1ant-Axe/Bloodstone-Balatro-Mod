@@ -24,6 +24,12 @@ Trident Joker,
 Lightningstone,
 Seastone,
 Plasmastone,
+Rosestone,
+Sapphirestone,
+Always Lucky,
+Galaxy Joker,
+Black Hole Joker,
+Supernova Joker,
 Time Joker
 
 Tarots:

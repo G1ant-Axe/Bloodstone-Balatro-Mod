@@ -1,11 +1,31 @@
 --- STEAMODDED HEADER
 --- MOD_NAME: Bloodstone
 --- MOD_ID: BloodstoneMod
---- MOD_AUTHOR: [GiantX]
+--- MOD_AUTHOR: [Giant-Axe]
 --- MOD_DESCRIPTION: Adds new jokers, consumables and enhancements to Balatro.
 --- PREFIX: bldstn
 ----------------------------------------------
 ------------MOD CODE -------------------------
+
+local mod_config = SMODS.current_mod.config
+SMODS.current_mod.config_tab = function()
+    return {
+        n = G.UIT.ROOT,
+        config = {
+            align = "cm",
+            padding = 0.05,
+            colour = G.C.CLEAR,
+        },
+        nodes = {
+            {n = G.UIT.R,config={align = "cm",},nodes={{n = G.UIT.T,config={text=localize('bldstn_reactive_text'),colour=G.C.DARK_EDITION,scale=0.7},}}},
+            create_toggle {
+                label = localize('bldstn_disable_reactive_anim'),
+                ref_table = mod_config.reactive,
+                ref_value = 'disable_card_animation',
+            },
+        }
+    }
+end
 
 function G.UIDEF.use_and_sell_buttons(card)
     local sell = nil
@@ -68,14 +88,29 @@ function G.UIDEF.use_and_sell_buttons(card)
            }}
         else
             if (card.area == G.pack_cards and G.pack_cards) then
-                return {
-                n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
-                    {n=G.UIT.R, config={mid = true}, nodes={
-                    }},
-                    {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, minh = 0.8*card.T.h, maxw = 0.7*card.T.w - 0.15, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_consumeable'}, nodes={
-                    {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
-                    }},
-                }}
+                if card.ability.name == 'c_bldstn_utopiatarot' then
+                    return {
+                    n=G.UIT.ROOT, config = {padding = -0.1, colour = G.C.CLEAR}, nodes={
+                        {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, minh = 0.6, maxw = 0.7*card.T.w - 0.15, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_consumeable'}, nodes={
+                        {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+                        }},
+                        {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.4, minh = 0.5, maxw = 0.9*card.T.w - 0.15, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'keep_in_hand', func = 'can_keep_consumeable'}, nodes={
+                        {n=G.UIT.T, config={text = localize('bldstn_keep_text'),colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
+                        }},
+                        {n = G.UIT.R, config = {align = "bm", w = 7.7 * card.T.w}},
+					    {n = G.UIT.R, config = {align = "bm", w = 7.7 * card.T.w}},
+					    {n = G.UIT.R, config = {align = "bm", w = 7.7 * card.T.w}},
+                    }}
+                else
+                    return {
+                    n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+                        {n=G.UIT.R, config={mid = true}, nodes={
+                        }},
+                        {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, minh = 0.8*card.T.h, maxw = 0.7*card.T.w - 0.15, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_consumeable'}, nodes={
+                        {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+                        }},
+                    }}
+                end
             end
             use = 
             {n=G.UIT.C, config={align = "cr"}, nodes={
@@ -303,7 +338,8 @@ G.FUNCS.active_button = function(e)
     if e.config.ref_table.ability.name == "j_bldstn_electricjoker" then
         if e.config.ref_table.ability.extra.is_ready_to_spawn then
             e.config.ref_table.ability.extra.activateable = false
-            if pseudorandom('j_bldstn_electricjoker'..G.SEED) < G.GAME.probabilities.normal / e.config.ref_table.ability.extra.chance_to_spawn then
+            if pseudorandom('j_bldstn_electricjoker'..G.SEED) < G.GAME.probabilities.normal / e.config.ref_table.ability.extra.chance_to_spawn or
+                e.config.ref_table.ability.always_lucky then
                 e.config.ref_table:juice_up()
                 card_eval_status_text(e.config.ref_table, 'extra', nil, nil, nil, {message = G.localization.misc.dictionary.bldstn_scbp_spawned, colour = G.C.RED})
                 local temp_card = {set = "Joker", area = G.shop_jokers, key = "j_bldstn_superchargedblueprint"}
@@ -320,7 +356,8 @@ G.FUNCS.active_button = function(e)
     if e.config.ref_table.ability.name == "j_bldstn_superchargedblueprint" then
         if e.config.ref_table.ability.extra.is_ready_to_spawn then
             e.config.ref_table.ability.extra.activateable = false
-            if pseudorandom('j_bldstn_superchargedblueprint'..G.SEED) < G.GAME.probabilities.normal / e.config.ref_table.ability.extra.chance_to_spawn then
+            if pseudorandom('j_bldstn_superchargedblueprint'..G.SEED) < G.GAME.probabilities.normal / e.config.ref_table.ability.extra.chance_to_spawn or
+                e.config.ref_table.ability.always_lucky then
                 e.config.ref_table:juice_up()
                 card_eval_status_text(e.config.ref_table, 'extra', nil, nil, nil, {message = G.localization.misc.dictionary.bldstn_electricbox_spawned, colour = G.C.RED})
                 local temp_card = {set = "Joker", area = G.shop_jokers, key = "j_bldstn_electricjoker"}
@@ -818,17 +855,23 @@ end
 function Card:get_id()
     if SMODS.has_enhancement(self, 'm_bldstn_jokercard') and not self.debuff then
         local max_base = 0
-        for k,v in ipairs(G.hand.highlighted) do
-            if v.base.id > max_base and v ~= self then
-                max_base = v.base.id
+        if pcall(function () if G.hand.highlighted then end end) then
+            for k,v in ipairs(G.hand.highlighted) do
+                if v.base.id > max_base and v ~= self then
+                    max_base = v.base.id
+                end
             end
         end
-        for k,v in ipairs(G.play.cards) do
-            if v.base.id > max_base and v ~= self then
-                max_base = v.base.id
+        if pcall(function () if #G.play.cards then end end) then
+            for k,v in ipairs(G.play.cards) do
+                if v.base.id ~= nil then
+                    if v.base.id > max_base and v ~= self then
+                        max_base = v.base.id
+                    end
+                end
             end
         end
-        if max_base == 0 then return 14 end
+        if max_base == 0 then max_base = 14 end
         return max_base
     end
     if self.ability.effect == 'Stone Card' and not self.vampired then
@@ -908,9 +951,9 @@ SMODS.Rarity{
     loc_txt = {
 	},
     pools = {
-        ["Joker"] = { rate = 10 },
+        ["Joker"] = { rate = 13 },
     },
-    default_weight = 0.02,
+    default_weight = 0.015,
 	badge_colour = HEX('DF00FF')
 }
 
@@ -963,7 +1006,7 @@ SMODS.Consumable{
 SMODS.Enhancement({
     key = 'jokercard',
     atlas = 'consumablesatlas',
-    pos = {x = 0, y = 1},
+    pos = {x = 0, y = 2},
     replace_base_card = true,
     any_suit = true,
     overrides_base_rank = true,
@@ -982,7 +1025,7 @@ SMODS.Enhancement({
 SMODS.Enhancement({
     key = 'traitcard',
     atlas = 'consumablesatlas',
-    pos = {x = 1, y = 1},
+    pos = {x = 1, y = 2},
     no_collection = true,
     overrides_base_rank = true,
     config = {
@@ -1105,7 +1148,7 @@ SMODS.Consumable{
 SMODS.Enhancement({
     key = 'isthisyourcardenhancement',
     atlas = 'consumablesatlas',
-    pos = {x = 1, y = 1},
+    pos = {x = 1, y = 2},
     overrides_base_rank = true,
     set_badges = function(self, card, badges)
         badges[#badges+1] = create_badge(localize('bldstn_trait_text'), G.C.GREEN, G.C.WHITE, 1)
@@ -1119,7 +1162,7 @@ SMODS.Enhancement({
 SMODS.Enhancement({
     key = 'traitcardinfo',
     atlas = 'consumablesatlas',
-    pos = {x = 1, y = 1},
+    pos = {x = 1, y = 2},
     no_collection = true,
     overrides_base_rank = true,
     set_badges = function(self, card, badges)
@@ -1150,7 +1193,7 @@ SMODS.Consumable{
     key = 'monsterspectral',
     effect = 'Enhance',
     config = {mod_conv = 'm_bldstn_traitcard', max_highlighted = 1},
-    pos = {x = 5, y = 0},
+    pos = {x = 0, y = 1},
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = G.P_CENTERS.m_bldstn_traitcardinfo
         info_queue[#info_queue+1] = G.P_CENTERS.m_bldstn_monsterenhancement
@@ -1161,7 +1204,7 @@ SMODS.Consumable{
 SMODS.Enhancement({
     key = 'monsterenhancement',
     atlas = 'consumablesatlas',
-    pos = {x = 1, y = 1},
+    pos = {x = 1, y = 2},
     overrides_base_rank = true,
     set_badges = function(self, card, badges)
         badges[#badges+1] = create_badge(localize('bldstn_trait_text'), G.C.GREEN, G.C.WHITE, 1)
@@ -1178,7 +1221,7 @@ SMODS.Consumable{
     key = 'angelspectral',
     effect = 'Enhance',
     config = {mod_conv = 'm_bldstn_traitcard', max_highlighted = 1},
-    pos = {x = 6, y = 0},
+    pos = {x = 1, y = 1},
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = G.P_CENTERS.m_bldstn_traitcardinfo
         info_queue[#info_queue+1] = G.P_CENTERS.m_bldstn_angelenhancement
@@ -1189,7 +1232,7 @@ SMODS.Consumable{
 SMODS.Enhancement({
     key = 'angelenhancement',
     atlas = 'consumablesatlas',
-    pos = {x = 1, y = 1},
+    pos = {x = 1, y = 2},
     overrides_base_rank = true,
     set_badges = function(self, card, badges)
         badges[#badges+1] = create_badge(localize('bldstn_trait_text'), G.C.GREEN, G.C.WHITE, 1)
@@ -1217,7 +1260,7 @@ SMODS.Consumable{
 SMODS.Enhancement({
     key = 'copycatenhancement',
     atlas = 'consumablesatlas',
-    pos = {x = 1, y = 1},
+    pos = {x = 1, y = 2},
     overrides_base_rank = true,
     set_badges = function(self, card, badges)
         badges[#badges+1] = create_badge(localize('bldstn_trait_text'), G.C.GREEN, G.C.WHITE, 1)
@@ -1256,6 +1299,71 @@ SMODS.Consumable{
     end,
     can_use = function(self, card)
         return true
+    end,
+}
+
+--Power Spectral
+SMODS.Consumable{
+    set = 'Spectral',
+    atlas = 'consumablesatlas',
+    key = 'powerspectral',
+    config = {max_highlighted = 1},
+    pos = {x = 2, y = 1},
+    loc_vars = function(self,info_queue,center)
+        return {vars = {colours = {HEX('DF00FF')},},}
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+            play_sound('timpani')
+
+            local _pool, _pool_key = get_current_pool('Joker', 'bldstn_power', nil, nil) --When u have all power jokers it spawns a normal Joker, so this makes it spawn a power joker instead
+            for i = 1, #_pool do
+                _pool[i] = G.P_CENTERS[_pool[i]]
+                for j = 1, #G.jokers.cards do
+                    if G.jokers.cards[j].center == _pool[i] then table.remove(_pool, i) end
+                end
+            end
+            local new_card = nil
+            if #_pool <= 1 then
+                local new_pool = {}
+                for k, v in pairs(G.P_CENTER_POOLS.Joker) do
+                    if v.rarity == 'bldstn_power' and v.name ~= 'j_bldstn_placeholderjoker' then table.insert(new_pool, v.key) end
+                end
+                local new_key = pseudorandom_element(new_pool, pseudoseed('power'))
+                new_card = create_card('Joker', G.jokers, nil, nil, nil, nil, new_key)
+            else
+                new_card = create_card('Joker', G.jokers, nil, 'bldstn_power', nil, nil, nil)
+            end
+
+            new_card:add_to_deck()
+            G.jokers:emplace(new_card)
+            card:juice_up(0.3, 0.5)
+            if G.GAME.dollars ~= 0 then
+                ease_dollars(-G.GAME.dollars, true)
+            end
+            return true end }))
+        delay(0.6)
+    end,
+    can_use = function(self, card)
+        if G.jokers.config.card_limit > #G.jokers.cards then return true end
+        return false
+    end,
+}
+
+--Voucher+ Spectral
+SMODS.Consumable{
+    set = 'Spectral',
+    atlas = 'consumablesatlas',
+    key = 'voucherspectral',
+    config = {max_highlighted = 1},
+    pos = {x = 3, y = 1},
+    use = function(self, card, area, copier)
+        SMODS.change_voucher_limit(1)
+        SMODS.change_voucher_limit(-1)
+    end,
+    can_use = function(self, card)
+        if G.shop_jokers.cards then return true end
+        return false
     end,
 }
 
@@ -1491,10 +1599,10 @@ SMODS.Joker{
         end
 	end,
     add_to_deck = function(self, card, from_debuff)
-		G.hand:change_size(1)
+		G.hand:ChangeHandSizePacac(1)
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.hand:change_size(-1)
+		G.hand:ChangeHandSizePacac(-1)
 	end,
     in_pool = function(self,wawa,wawa2)
         return true
@@ -1574,7 +1682,7 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = G.P_CENTERS.j_bldstn_superchargedblueprint
         if center.ability.extra.activetext == 'Inactive' then localize("bldstn_inactive_text") end
-        return {vars = {center.ability.extra.activetext,center.ability.extra.chance_to_spawn,center.ability.extra.retrigger, colours = {HEX('DF00FF'),},},}
+        return {vars = {''..(G.GAME and G.GAME.probabilities.normal or 1),center.ability.extra.chance_to_spawn,center.ability.extra.retrigger, colours = {HEX('DF00FF'),},},}
     end,
     check_for_unlock = function(self, args)
         if args.type == 'Xm' then
@@ -1594,6 +1702,12 @@ SMODS.Joker{
             card.ability.extra.activateable = true
         end
 	end,
+    remove_from_deck = function(self, card, from_debuff)
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas"] then G.jokers.cards[i].children.center.atlas = G.ASSET_ATLAS["Joker"] end
+            if G.jokers.cards[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas2"] then G.jokers.cards[i].children.center.atlas = G.ASSET_ATLAS["bldstn_jokersatlas"] end
+        end
+    end,
     in_pool = function(self,wawa,wawa2)
         return true
     end,
@@ -1621,7 +1735,7 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,center)
         if center.ability.extra.activetext == 'Inactive' then localize("bldstn_inactive_text") end
-        return {vars = {center.ability.extra.activetext,center.ability.extra.chance_to_spawn,center.ability.extra.retrigger,colours = {HEX('DF00FF'),},},}
+        return {vars = {''..(G.GAME and G.GAME.probabilities.normal or 1),center.ability.extra.chance_to_spawn,center.ability.extra.retrigger,colours = {HEX('DF00FF'),},},}
     end,
     check_for_unlock = function(self, args)
         if args.type == 'Xm' then
@@ -1648,17 +1762,22 @@ SMODS.Joker{
                 else table.insert(other_jokers, G.jokers.cards[i]) end
             end
 
-            if #jokers_to_boost <= 3 then
-                for i = 1, #jokers_to_boost do
-                    if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["Joker"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['bldstn_respriteatlas'] end
-                    if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["bldstn_jokersatlas"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['bldstn_respriteatlas2'] end
+            if elecbox ~= 0 and thisspbp ~= 0 then
+
+                if #jokers_to_boost <= 3 then
+                    for i = 1, #jokers_to_boost do
+                        if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["Joker"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['bldstn_respriteatlas'] end
+                        if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["bldstn_jokersatlas"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['bldstn_respriteatlas2'] end
+                    end
+                else
+                    for i = 1, #jokers_to_boost do
+                        if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['Joker'] end
+                        if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas2"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['bldstn_jokersatlas'] end
+                    end
                 end
-            else
-                for i = 1, #jokers_to_boost do
-                    if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['Joker'] end
-                    if jokers_to_boost[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas2"] then jokers_to_boost[i].children.center.atlas = G.ASSET_ATLAS['bldstn_jokersatlas'] end
-                end
+
             end
+
             for i = 1, #other_jokers do
                 if other_jokers[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas"] then other_jokers[i].children.center.atlas = G.ASSET_ATLAS["Joker"] end
                 if other_jokers[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas2"] then other_jokers[i].children.center.atlas = G.ASSET_ATLAS["bldstn_jokersatlas"] end
@@ -1704,6 +1823,12 @@ SMODS.Joker{
             end
         end
 	end,
+    remove_from_deck = function(self, card, from_debuff)
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas"] then G.jokers.cards[i].children.center.atlas = G.ASSET_ATLAS["Joker"] end
+            if G.jokers.cards[i].children.center.atlas == G.ASSET_ATLAS["bldstn_respriteatlas2"] then G.jokers.cards[i].children.center.atlas = G.ASSET_ATLAS["bldstn_jokersatlas"] end
+        end
+    end,
     in_pool = function(self,wawa,wawa2)
         return true
     end,
@@ -1778,6 +1903,196 @@ SMODS.Joker{
     end,
 }
 
+--Lightningstone
+SMODS.Joker{
+    key = 'lightningstonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 7, y = 3},
+    config = {
+      extra = {
+          money = 15,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.money,center.ability.extra.chance,''..(G.GAME and G.GAME.probabilities.normal or 1)},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if pseudorandom('lightningstone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.end_of_round and context.cardarea == G.jokers then
+            return{
+                dollars = card.ability.extra.money
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Seastone
+SMODS.Joker{
+    key = 'seastonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 8, y = 3},
+    config = {
+      extra = {
+          chips = 100,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.chips,center.ability.extra.chance,''..(G.GAME and G.GAME.probabilities.normal or 1)},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if pseudorandom('seastone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.individual and context.cardarea == G.play and context.other_card:is_suit("Clubs") then
+            return{
+                chips = card.ability.extra.chips
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Plasmastone
+SMODS.Joker{
+    key = 'plasmastonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 9, y = 3},
+    config = {
+      extra = {
+          rerolls = 0,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.rerolls,center.ability.extra.chance,''..(G.GAME and G.GAME.probabilities.normal or 1)},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if context.reroll_shop then
+            if card.ability.extra.rerolls >= 1 then
+                if pseudorandom('plasmastone') < G.GAME.probabilities.normal/card.ability.extra.chance then
+                    G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+                    calculate_reroll_cost(true)
+                    card:juice_up()
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = G.localization.misc.dictionary.bldstn_free_reroll, colour = G.C.GREEN})
+                end
+                card.ability.extra.rerolls = 0
+            elseif card.ability.extra.rerolls < 2 then
+                card.ability.extra.rerolls = card.ability.extra.rerolls + 1
+            end
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Rosestone
+SMODS.Joker{
+    key = 'rosestonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 0, y = 5},
+    config = {
+      extra = {
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.chance,''..(G.GAME and G.GAME.probabilities.normal or 1)},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and context.cardarea == G.jokers and context.after and
+            pseudorandom('rosestone') < G.GAME.probabilities.normal/card.ability.extra.chance then
+            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                delay = 0.0,
+                func = (function()
+                    local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'vag')
+                    card:add_to_deck()
+                    G.consumeables:emplace(card)
+                    G.GAME.consumeable_buffer = 0
+                    return true
+                end)}))
+            return {
+                message = localize('k_plus_tarot'),
+                card = card
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
+--Sapphirestone
+SMODS.Joker{
+    key = 'sapphirestonejoker',
+    atlas = 'jokersatlas',
+    rarity = 2,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 1, y = 5},
+    config = {
+      extra = {
+          xchips = 1.5,
+          chance = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.xchips,center.ability.extra.chance,''..(G.GAME and G.GAME.probabilities.normal or 1)},}
+    end,
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+    calculate = function(self, card, context)
+        if pseudorandom('sapphirestone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.individual and context.cardarea == G.play and context.other_card:is_suit("Hearts") then
+            return{
+                x_chips = card.ability.extra.xchips
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
 --Trident
 SMODS.Joker{
     key = 'tridentjoker',
@@ -1823,108 +2138,32 @@ SMODS.Joker{
     end,
 }
 
---Lightningstone
+--Always Lucky Joker
 SMODS.Joker{
-    key = 'lightningstonejoker',
+    key = 'alwaysluckyjoker',
     atlas = 'jokersatlas',
     rarity = 2,
-    cost = 7,
-    blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
-    pos = {x = 7, y = 3},
-    config = {
-      extra = {
-          money = 15,
-          chance = 2,
-      }
-    },
-    loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money,center.ability.extra.chance,},}
-    end,
-    check_for_unlock = function(self, args)
-        unlock_card(self)
-    end,
-    calculate = function(self, card, context)
-        if pseudorandom('lightningstone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.end_of_round and context.cardarea == G.jokers then
-            return{
-                dollars = card.ability.extra.money
-            }
-        end
-    end,
-    in_pool = function(self,wawa,wawa2)
-        return true
-    end,
-}
-
---Seastone
-SMODS.Joker{
-    key = 'seastonejoker',
-    atlas = 'jokersatlas',
-    rarity = 2,
-    cost = 7,
-    blueprint_compat = true,
-    eternal_compat = true,
-    perishable_compat = true,
-    pos = {x = 8, y = 3},
-    config = {
-      extra = {
-          chips = 100,
-          chance = 2,
-      }
-    },
-    loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.chips,center.ability.extra.chance,},}
-    end,
-    check_for_unlock = function(self, args)
-        unlock_card(self)
-    end,
-    calculate = function(self, card, context)
-        if pseudorandom('seastone') < G.GAME.probabilities.normal/card.ability.extra.chance and context.individual and context.cardarea == G.play and context.other_card:is_suit("Clubs") then
-            return{
-                chips = card.ability.extra.chips
-            }
-        end
-    end,
-    in_pool = function(self,wawa,wawa2)
-        return true
-    end,
-}
-
---Plasmastone
-SMODS.Joker{
-    key = 'plasmastonejoker',
-    atlas = 'jokersatlas',
-    rarity = 2,
-    cost = 7,
+    cost = 6,
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
-    pos = {x = 9, y = 3},
+    pos = {x = 2, y = 5},
     config = {
       extra = {
-          rerolls = 0,
-          chance = 2,
+          other_card = nil,
       }
     },
-    loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.rerolls,center.ability.extra.chance,},}
-    end,
     check_for_unlock = function(self, args)
         unlock_card(self)
     end,
-    calculate = function(self, card, context)
-        if context.reroll_shop then
-            if card.ability.extra.rerolls >= 1 then
-                if pseudorandom('plasmastone') < G.GAME.probabilities.normal/card.ability.extra.chance then
-                    G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
-                    calculate_reroll_cost(true)
-                    card:juice_up()
-                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = G.localization.misc.dictionary.bldstn_free_reroll, colour = G.C.GREEN})
-                end
-                card.ability.extra.rerolls = 0
-            elseif card.ability.extra.rerolls < 2 then
-                card.ability.extra.rerolls = card.ability.extra.rerolls + 1
+    update = function(self, card, dt)
+        if pcall( function () if G.jokers.cards then end end) then
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then card.ability.extra.other_card = G.jokers.cards[i + 1] end
+                if G.jokers.cards[i] == card.ability.extra.other_card and G.jokers.cards[i - 1] ~= card then card.ability.extra.other_card.ability.always_lucky = false end
+            end
+            if card.ability.extra.other_card then
+                card.ability.extra.other_card.ability.always_lucky = true
             end
         end
     end,
@@ -1939,7 +2178,7 @@ SMODS.Joker{
     atlas = 'jokersatlas',
     rarity = 4,
     cost = 20,
-    blueprint_compat = true,
+    blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
     pos = {x = 5, y = 1},
@@ -1965,7 +2204,164 @@ SMODS.Joker{
     end,
 }
 
-SMODS.Joker:take_ownership('certificate', -- certificate doesn't work for some reason (super annoying) *took me way too long to fix this
+--Galaxy Joker Atlas
+SMODS.Atlas{
+    key = 'galaxyjokeratlas',
+    path = 'GalaxyJoker.png',
+    px = 71,
+    py = 95
+}
+
+--Galaxy Joker Atlas Negative
+SMODS.Atlas{
+    key = 'galaxyjoker2atlas',
+    path = 'GalaxyJoker2.png',
+    px = 71,
+    py = 95
+}
+
+SMODS.Gradient{
+    key = 'galaxyg1',
+    colours = {HEX('ea4ff3'), HEX('8624ff'), HEX('9e34fb'), HEX('b644f7'), HEX('ce54f4'), HEX('e664f0'),},
+    cycle = 4,
+}
+SMODS.Gradient{
+    key = 'galaxyg2',
+    colours = {HEX('ce54f4'), HEX('e664f0'), HEX('ea4ff3'), HEX('8624ff'), HEX('9e34fb'), HEX('b644f7'),},
+    cycle = 4,
+}
+
+SMODS.Gradient{
+    key = 'blackholeg1',
+    colours = {HEX('000000'),HEX('404040'),HEX('808080'),HEX('bfbfbf'),HEX('ffffff'),},
+    cycle = 4,
+}
+SMODS.Gradient{
+    key = 'blackholeg2',
+    colours = {HEX('bfbfbf'),HEX('ffffff'),HEX('000000'),HEX('404040'),HEX('808080'),},
+    cycle = 4,
+}
+
+SMODS.Gradient{
+    key = 'supernovag1',
+    colours = {HEX('ffffa8'),HEX('ddffc5'),HEX('baffe2'),HEX('97ffff'),HEX('88ffff'),},
+    cycle = 4,
+}
+SMODS.Gradient{
+    key = 'supernovag2',
+    colours = {HEX('97ffff'),HEX('88ffff'),HEX('ffffa8'),HEX('ddffc5'),HEX('baffe2'),},
+    cycle = 4,
+}
+
+--Galaxy Joker
+SMODS.Joker{
+    key = 'galaxyjoker',
+    atlas = 'galaxyjokeratlas',
+    rarity = 3,
+    cost = 10,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 0, y = 0},
+    config = {
+        extra = {
+            galaxies_sold = 0,
+            chance_to_spawn = 5
+        }
+    },
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+	update = function(self, card, dt)
+        if not mod_config.reactive.disable_card_animation then
+            if card.config.center.discovered then
+                local pos_x = math.floor(math.fmod((card.VT.x + 4) * 30, 68))
+                card.children.center:set_sprite_pos({x = pos_x, y = 0})
+                if card.edition then
+                    if card.edition.negative then
+                        card.children.center.atlas = G.ASSET_ATLAS['bldstn_galaxyjoker2atlas']
+                    else
+                        card.children.center.atlas = G.ASSET_ATLAS['bldstn_galaxyjokeratlas']
+                    end
+                else
+                    card.children.center.atlas = G.ASSET_ATLAS['bldstn_galaxyjokeratlas']
+                end
+            end
+        end
+	end,
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('bldstn_reactive_text'), G.C.BLACK, G.C.DARK_EDITION, 1.2)
+    end,
+}
+
+--Black Hole Joker
+SMODS.Joker{
+    key = 'blackholejoker',
+    atlas = 'galaxyjokeratlas',
+    rarity = 4,
+    cost = 20,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 0, y = 1},
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+	update = function(self, card, dt)
+        if not mod_config.reactive.disable_card_animation then
+            if card.config.center.discovered then
+                local pos_x = math.floor(math.fmod((card.VT.x + 4) * 30, 68))
+                card.children.center:set_sprite_pos({x = pos_x, y = 1})
+            end
+        end
+	end,
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('bldstn_reactive_text'), G.C.BLACK, G.C.DARK_EDITION, 1.2)
+    end,
+}
+
+--Supernova Joker
+SMODS.Joker{
+    key = 'supernovajoker',
+    atlas = 'galaxyjokeratlas',
+    rarity = 4,
+    cost = 20,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 0, y = 2},
+    config = {
+      extra = {
+          num_of_planets_start = 7,
+          num_of_planets = 3,
+      }
+    },
+    check_for_unlock = function(self, args)
+        unlock_card(self)
+    end,
+	update = function(self, card, dt)
+        if not mod_config.reactive.disable_card_animation then
+            if card.config.center.discovered then
+                local pos_x = math.floor(math.fmod((card.VT.x + 4) * 30, 68))
+                card.children.center:set_sprite_pos({x = pos_x, y = 2})
+            end
+        end
+	end,
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('bldstn_reactive_text'), G.C.BLACK, G.C.DARK_EDITION, 1.2)
+    end,
+}
+
+SMODS.Joker:take_ownership('certificate', -- certificate doesn't work for some reason (super annoying)
     {
     config = {
       extra = {
@@ -1979,8 +2375,8 @@ SMODS.Joker:take_ownership('certificate', -- certificate doesn't work for some r
     true
 )
 
-function CardArea:change_size(delta)
-    if delta ~= 0 then 
+function CardArea:ChangeHandSizePacac(delta)
+    if delta ~= 0 then
         G.E_MANAGER:add_event(Event({
             func = function() 
                 self.config.real_card_limit = (self.config.real_card_limit or self.config.card_limit) + delta
@@ -1996,6 +2392,19 @@ function CardArea:change_size(delta)
         return true
         end}))
     end
+end
+
+local ec = eval_card --thanks to Cryptid for this, saved me a ton of time
+function eval_card(card, context)
+	local ggpn = G.GAME.probabilities.normal
+	if card.ability.always_lucky then
+		G.GAME.probabilities.normal = 1e9
+	end
+	local ret, post = ec(card, context)
+	if card.ability.always_lucky then
+		G.GAME.probabilities.normal = ggpn
+	end
+	return ret, post
 end
 
 ----------------------------------------------

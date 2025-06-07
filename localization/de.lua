@@ -23,6 +23,9 @@ return {
             bldstn_copycat_text = 'Kopieerkat',
             bldstn_keep_text = 'Bewaren',
             bldstn_free_reroll = '+1 Gratis Herrol',
+            bldstn_reactive_text = 'Reactieve Jokers',
+            bldstn_disable_reactive_anim = 'Reactieve Animaties Uitschakelen',
+            bldstn_plus_planet = 'Planeten',
         },
     },
     descriptions = {
@@ -96,7 +99,7 @@ return {
             j_bldstn_electricjoker = {
                 name = 'Elektrische Doos',
                 text = {
-                    '{C:attention}Actief:{} {C:green}1 in #2#{} kans om',
+                    '{C:attention}Actief:{} {C:green}#1# in #2#{} kans om',
                     'te genereren {V:1}"Super Oplaadbare Blueprint"{}',
                     '{C:inactive}(Een keer per winkel)',
                     "\n",
@@ -107,7 +110,7 @@ return {
             j_bldstn_superchargedblueprint = {
                 name = 'Super Oplaadbare Blueprint',
                 text = {
-                    '{C:attention}Actief:{} {C:green}1 in #2#{} kans om',
+                    '{C:attention}Actief:{} {C:green}#1# in #2#{} kans om',
                     'te genereren {V:1}"Elektrische Doos"{}',
                     '{C:inactive}(Een keer per winkel)',
                     "\n",
@@ -140,14 +143,14 @@ return {
             j_bldstn_lightningstonejoker = {
                 name = 'Bliksemsteen',
                 text = {
-                    'Aan het einde van de ronde {C:green}1 op #2#{}',
+                    'Aan het einde van de ronde {C:green}#3# op #2#{}',
                     'kans om {C:money}'.. localize('$') .. '#1# te krijgen',
                 },
             },
             j_bldstn_seastonejoker = {
                 name = 'Zee steen',
                 text = {
-                    '{C:green}1 op #2#{} kans om {C:chips}+#1#{} Chips te krijgen',
+                    '{C:green}#3# op #2#{} kans om {C:chips}+#1#{} Chips te krijgen',
                     'wanneer {C:clubs}Klavers{} wordt gescoord'
                 },
             },
@@ -155,9 +158,57 @@ return {
                 name = 'Plasmasteen',
                 text = {
                     'Elke {C:attention}2{} Herrollen is er',
-                    'een {C:green}1 op #2#{} kans om te krijgen',
+                    'een {C:green}#3# op #2#{} kans om te krijgen',
                     '{C:attention}1{} gratis {C:green}Herrol',
                     '{C:inactive}(#1#/2 Herrollen)'
+                },
+            },
+            j_bldstn_rosestonejoker = {
+                name = 'Rozensteen',
+                text = {
+                    '{C:green}#2# op #1#{} kans om een {C:tarot}Tarotkaart te maken',
+                    'na het spelen van een hand',
+                    '{C:inactive}(Moet ruimte hebben)',
+                },
+            },
+            j_bldstn_sapphirestonejoker = {
+                name = 'Saffiersteen',
+                text = {
+                    "{C:green}#3# op #2#{} kans dat",
+                    "gespeelde kaarten met",
+                    "{C:hearts}Harten{} geven",
+                    "{X:chips,C:white} X#1# {} Chips bij score",
+                },
+            },
+            j_bldstn_alwaysluckyjoker = {
+                name = 'Altijd Gelukkig',
+                text = {
+                    'Alle {C:green,E:1,S:1.1}kansen{} van de kaart',
+                    'rechts ervan zijn {C:attention}gegarandeerd',
+                },
+            },
+            j_bldstn_galaxyjoker = {
+                name = '{C:bldstn_galaxyg1}Galaxy {C:bldstn_galaxyg2}Joker',
+                text = {
+                    'Geef me wat ideeën over wat deze joker kan doen',
+                    'in de reacties, en de beste wordt toegevoegd!',
+                    'Deze joker verschijnt niet in het spel.',
+                },
+            },
+            j_bldstn_blackholejoker = {
+                name = '{C:bldstn_blackholeg1}Zwart{C:bldstn_blackholeg1}Gat {C:bldstn_blackholeg2}Joker',
+                text = {
+                    'Geef me wat ideeën over wat deze joker kan doen',
+                    'in de reacties, en de beste wordt toegevoegd!',
+                    'Deze joker verschijnt niet in het spel.',
+                },
+            },
+            j_bldstn_supernovajoker = {
+                name = '{C:bldstn_supernovag1}Supernova {C:bldstn_supernovag2}Joker',
+                text = {
+                    'Geef me wat ideeën over wat deze joker kan doen',
+                    'in de reacties, en de beste wordt toegevoegd!',
+                    'Deze joker verschijnt niet in het spel.',
                 },
             },
         },
@@ -196,7 +247,7 @@ return {
                 name = "Utopia",
                 text = {
                     'Als gebruikt tijdens een {C:attention}blind{},',
-                    'halveer het {C:attention}scorevereiste{}. ',
+                    'halveer de {C:attention}scorevereiste{}. ',
                     'Als gebruikt ergens {C:attention}anders{},',
                     'ontvang {C:money}'.. localize('$') ..'10',
                 }
@@ -221,6 +272,21 @@ return {
                     "voegt {C:green}Eigenschap Engel{} toe.",
                     "{C:inactive}(Alleen als de kaart niet",
                     "{C:inactive}de {C:green}Eigenschap Monster{} heeft)",
+                }
+            },
+            c_bldstn_powerspectral = {
+                name = "Kracht",
+                text = {
+                    "Maakt een willekeurige",
+                    "{V:1}Kracht Joker{C:attention} aan{},",
+                    "stelt geld in op {C:money}$0",
+                }
+            },
+            c_bldstn_voucherspectral = {
+                name = "Voucher+",
+                text = {
+                    "Laat een willekeurige voucher verschijnen",
+                    "in de winkel, tot de volgende inzet",
                 }
             },
         },

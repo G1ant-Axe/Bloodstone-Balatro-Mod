@@ -23,6 +23,9 @@ return {
             bldstn_copycat_text = 'Копия',
             bldstn_keep_text = 'Оставить',
             bldstn_free_reroll = '+1 бесплатный переброс',
+            bldstn_reactive_text = 'Реактивные Джокеры',
+            bldstn_disable_reactive_anim = 'Отключить Реактивные Анимации',
+            bldstn_plus_planet = 'Планеты',
         },
     },
     descriptions = {
@@ -96,7 +99,7 @@ return {
             j_bldstn_electricjoker = {
                 name = 'Электрическая коробка',
                 text = {
-                    '{C:attention}Активно:{} {C:green}1 из #2#{} шанса',
+                    '{C:attention}Активно:{} {C:green}#1# из #2#{} шанса',
                     'создать {V:1}"Суперзаряженный чертеж"{}',
                     '{C:inactive}(Один раз за магазин)',
                     "\n",
@@ -107,7 +110,7 @@ return {
             j_bldstn_superchargedblueprint = {
                 name = 'Суперзаряженный чертеж',
                 text = {
-                    '{C:attention}Активно:{} {C:green}1 из #2#{} шанса',
+                    '{C:attention}Активно:{} {C:green}#1# из #2#{} шанса',
                     'создать {V:1}"Электрическую коробку"{}',
                     '{C:inactive}(Один раз за магазин)',
                     "\n",
@@ -140,14 +143,14 @@ return {
             j_bldstn_lightningstonejoker = {
                 name = 'Грозовой Камень',
                 text = {
-                    'В конце раунда шанс {C:green}1 из #2#{}',
+                    'В конце раунда шанс {C:green}#3# из #2#{}',
                     'получить {C:money}'.. localize('$') .. '#1#',
                 },
             },
             j_bldstn_seastonejoker = {
                 name = 'Морской Камень',
                 text = {
-                    '{C:green}1 из #2#{} шанс получить {C:chips}+#1#{} фишек',
+                    '{C:green}#3# из #2#{} шанс получить {C:chips}+#1#{} фишек',
                     'при наборе {C:clubs}Треф{}'
                 },
             },
@@ -155,9 +158,57 @@ return {
                 name = 'Плазменный Камень',
                 text = {
                     'Каждые {C:attention}2{} переброса есть',
-                    '{C:green}1 из #2#{} шанс получить',
+                    '{C:green}#3# из #2#{} шанс получить',
                     '{C:attention}1{} бесплатный {C:green}переброс',
                     '{C:inactive}(#1#/2 перебросов)'
+                },
+            },
+            j_bldstn_rosestonejoker = {
+                name = 'Розовый Камень',
+                text = {
+                    '{C:green}#2# из #1#{} шанс создать {C:tarot}Карту Таро',
+                    'после розыгрыша руки',
+                    '{C:inactive}(Должно быть место)',
+                },
+            },
+            j_bldstn_sapphirestonejoker = {
+                name = 'Сапфировый Камень',
+                text = {
+                    "{C:green}#3# из #2#{} шанс, что",
+                    "сыгранные карты с",
+                    "{C:hearts}Черви{} дадут",
+                    "{X:chips,C:white} X#1# {} Фишек при подсчёте очков",
+                },
+            },
+            j_bldstn_alwaysluckyjoker = {
+                name = 'Всегда везучий',
+                text = {
+                    'Все {C:green,E:1,S:1.1}вероятности{} карты',
+                    'справа от неё {C:attention}гарантированы',
+                },
+            },
+            j_bldstn_galaxyjoker = {
+                name = '{C:bldstn_galaxyg1}Галактический {C:bldstn_galaxyg2}Джокер',
+                text = {
+                    'Предложите идеи, что этот джокер может делать',
+                    'в комментариях, и лучшая будет добавлена!',
+                    'Этот джокер не появляется в игре.',
+                },
+            },
+            j_bldstn_blackholejoker = {
+                name = '{C:bldstn_blackholeg1}Чёрная{C:bldstn_blackholeg1}Дыра {C:bldstn_blackholeg2}Джокер',
+                text = {
+                    'Предложите идеи, что этот джокер может делать',
+                    'в комментариях, и лучшая будет добавлена!',
+                    'Этот джокер не появляется в игре.',
+                },
+            },
+            j_bldstn_supernovajoker = {
+                name = '{C:bldstn_supernovag1}Сверхновая {C:bldstn_supernovag2}Джокер',
+                text = {
+                    'Предложите идеи, что этот джокер может делать',
+                    'в комментариях, и лучшая будет добавлена!',
+                    'Этот джокер не появляется в игре.',
                 },
             },
         },
@@ -196,7 +247,7 @@ return {
                 name = "Утопия",
                 text = {
                     'Если используется в {C:attention}слепой{},',
-                    'половина {C:attention}требования по очкам{}. ',
+                    'сократить вдвое {C:attention}требование к счету{}. ',
                     'Если используется в {C:attention}другом случае{},',
                     'получите {C:money}'.. localize('$') ..'10',
                 }
@@ -221,6 +272,21 @@ return {
                     "добавляет {C:green}Черту Ангел{}. ",
                     "{C:inactive}(Только если карта не имеет",
                     "{C:inactive}черты {C:green}Монстр{}{})",
+                }
+            },
+            c_bldstn_powerspectral = {
+                name = "Сила",
+                text = {
+                    "Создаёт случайного",
+                    "{V:1}Джокера Силы{C:attention}{},",
+                    "устанавливает деньги на {C:money}$0",
+                }
+            },
+            c_bldstn_voucherspectral = {
+                name = "Купон+",
+                text = {
+                    "Создаёт случайный купон",
+                    "в магазине до следующей ставки",
                 }
             },
         },

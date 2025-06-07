@@ -23,6 +23,9 @@ return {
             bldstn_copycat_text = 'Copieur',
             bldstn_keep_text = 'Garder',
             bldstn_free_reroll = '+1 Relance Gratuite',
+            bldstn_reactive_text = 'Jokers Réactifs',
+            bldstn_disable_reactive_anim = 'Désactiver les Animations Réactives',
+            bldstn_plus_planet = 'Planètes',
         },
     },
     descriptions = {
@@ -96,7 +99,7 @@ return {
             j_bldstn_electricjoker = {
                 name = 'Boîte électrique',
                 text = {
-                    '{C:attention}Actif:{} {C:green}1 sur #2#{} chance de',
+                    '{C:attention}Actif:{} {C:green}#1# sur #2#{} chance de',
                     'générer {V:1}"Plan super chargé"{}',
                     '{C:inactive}(Une fois par magasin)',
                     "\n",
@@ -107,7 +110,7 @@ return {
             j_bldstn_superchargedblueprint = {
                 name = 'Plan super chargé',
                 text = {
-                    '{C:attention}Actif:{} {C:green}1 sur #2#{} chance de',
+                    '{C:attention}Actif:{} {C:green}#1# sur #2#{} chance de',
                     'générer {V:1}"Boîte électrique"{}',
                     '{C:inactive}(Une fois par magasin)',
                     "\n",
@@ -140,14 +143,14 @@ return {
             j_bldstn_lightningstonejoker = {
                 name = 'Pierre Foudre',
                 text = {
-                    'À la fin du tour, {C:green}1 sur #2#{}',
+                    'À la fin du tour, {C:green}#3# sur #2#{}',
                     'chance de gagner {C:money}'.. localize('$') .. '#1#',
                 },
             },
             j_bldstn_seastonejoker = {
                 name = 'Pierre Marine',
                 text = {
-                    '{C:green}1 sur #2#{} de gagner {C:chips}+#1#{} Jetons',
+                    '{C:green}#3# sur #2#{} de gagner {C:chips}+#1#{} Jetons',
                     'quand un {C:clubs}Trèfle{} est comptabilisé'
                 },
             },
@@ -155,9 +158,57 @@ return {
                 name = 'Pierre Plasma',
                 text = {
                     'Toutes les {C:attention}2{} Relances, il y a',
-                    'une chance de {C:green}1 sur #2#{} de gagner',
+                    'une chance de {C:green}#3# sur #2#{} de gagner',
                     '{C:attention}1{} {C:green}Relance{} gratuite',
                     '{C:inactive}(#1#/2 Relances)'
+                },
+            },
+            j_bldstn_rosestonejoker = {
+                name = 'Pierre Rose',
+                text = {
+                    '{C:green}#2# sur #1#{} de chance de créer une {C:tarot}Carte de Tarot',
+                    'après avoir joué la main',
+                    '{C:inactive}(Doit avoir de la place)',
+                },
+            },
+            j_bldstn_sapphirestonejoker = {
+                name = 'Pierre Saphir',
+                text = {
+                    "{C:green}#3# sur #2#{} de chance que",
+                    "les cartes jouées avec",
+                    "{C:hearts}Cœur{} donnent",
+                    "{X:chips,C:white} X#1# {} Jetons lorsqu'elles sont comptées",
+                },
+            },
+            j_bldstn_alwaysluckyjoker = {
+                name = 'Toujours Chanceux',
+                text = {
+                    'Toutes les {C:green,E:1,S:1.1}probabilités{} de la carte',
+                    'à sa droite sont {C:attention}garanties',
+                },
+            },
+            j_bldstn_galaxyjoker = {
+                name = '{C:bldstn_galaxyg1}Joker {C:bldstn_galaxyg2}Galaxie',
+                text = {
+                    'Donnez-moi des idées sur ce que ce joker pourrait faire',
+                    'dans les commentaires, et la meilleure sera ajoutée !',
+                    'Ce joker n’apparaît pas dans le jeu.',
+                },
+            },
+            j_bldstn_blackholejoker = {
+                name = '{C:bldstn_blackholeg1}Trou{C:bldstn_blackholeg1} Noir {C:bldstn_blackholeg2}Joker',
+                text = {
+                    'Donnez-moi des idées sur ce que ce joker pourrait faire',
+                    'dans les commentaires, et la meilleure sera ajoutée !',
+                    'Ce joker n’apparaît pas dans le jeu.',
+                },
+            },
+            j_bldstn_supernovajoker = {
+                name = '{C:bldstn_supernovag1}Joker {C:bldstn_supernovag2}Supernova',
+                text = {
+                    'Donnez-moi des idées sur ce que ce joker pourrait faire',
+                    'dans les commentaires, et la meilleure sera ajoutée !',
+                    'Ce joker n’apparaît pas dans le jeu.',
                 },
             },
         },
@@ -196,7 +247,7 @@ return {
                 name = "Utopie",
                 text = {
                     'Si utilisé pendant un {C:attention}aveugle{},',
-                    'réduisez de moitié l\'{C:attention}exigence de score{}. ',
+                    'réduit de moitié l\'{C:attention}exigence de score{}.',
                     'Si utilisé ailleurs {C:attention}autrement{},',
                     'gagnez {C:money}'.. localize('$') ..'10',
                 }
@@ -221,6 +272,20 @@ return {
                     "ajoute la {C:green}Caractéristique Ange{}. ",
                     "{C:inactive}(Seulement si la carte ne possède pas",
                     "{C:inactive}la {C:green}Caractéristique Monstre{}{C:inactive})",
+                }
+            },
+            c_bldstn_powerspectral = {
+                name = "Pouvoir",
+                text = {
+                    "Crée un {V:1}Joker de Pouvoir{C:attention} aléatoire{},",
+                    "fixe l'argent à {C:money}0$",
+                }
+            },
+            c_bldstn_voucherspectral = {
+                name = "Bon+",
+                text = {
+                    "Fait apparaître un bon aléatoire",
+                    "en boutique, jusqu'à la prochaine mise",
                 }
             },
         },

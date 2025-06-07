@@ -21,6 +21,9 @@ return {
             bldstn_copycat_text = 'Copycat',
             bldstn_keep_text = 'Keep',
             bldstn_free_reroll = '+1 Free Reroll',
+            bldstn_reactive_text = 'Reactive Jokers',
+            bldstn_disable_reactive_anim = 'Disable Reactive Animations',
+            bldstn_plus_planet = 'Planets',
         },
     },
     descriptions = {
@@ -35,7 +38,7 @@ return {
             j_bldstn_winterjoker = {
                 name = 'Winter Joker',
                 text = {
-                  'All {C:clubs}Club{} cards Become',
+                  'All {C:clubs}Club{} cards become',
                   '{C:attention}Glass Cards{}',
                 },
             },
@@ -95,7 +98,7 @@ return {
             j_bldstn_electricjoker = {
                 name = 'Electric Box',
                 text = {
-                    '{C:attention}Active:{} {C:green}1 in #2#{} chance to',
+                    '{C:attention}Active:{} {C:green}#1# in #2#{} chance to',
                     'spawn {V:1}"Super Charged Blueprint"{}',
                     '{C:inactive}(Once per shop)',
                     "\n",
@@ -106,7 +109,7 @@ return {
             j_bldstn_superchargedblueprint = {
                 name = 'Super Charged Blueprint',
                 text = {
-                    '{C:attention}Active:{} {C:green}1 in #2#{} chance to',
+                    '{C:attention}Active:{} {C:green}#1# in #2#{} chance to',
                     'spawn {V:1}"Electric Box"{}',
                     '{C:inactive}(Once per shop)',
                     "\n",
@@ -139,14 +142,14 @@ return {
             j_bldstn_lightningstonejoker = {
                 name = 'Lightningstone',
                 text = {
-                    'At end of round {C:green}1 in #2#{}',
+                    'At end of round {C:green}#3# in #2#{}',
                     'chance to gain {C:money}'.. localize('$') .. '#1#',
                 },
             },
             j_bldstn_seastonejoker = {
                 name = 'Seastone',
                 text = {
-                    '{C:green}1 in #2#{} to gain {C:chips}+#1#{} Chips',
+                    '{C:green}#3# in #2#{} to gain {C:chips}+#1#{} Chips',
                     'when {C:clubs}Clubs{} is scored'
                 },
             },
@@ -154,9 +157,57 @@ return {
                 name = 'Plasmastone',
                 text = {
                     'Every {C:attention}2{} Rerolls there is',
-                    'a {C:green}1 in #2#{} chance to gain',
+                    'a {C:green}#3# in #2#{} chance to gain',
                     '{C:attention}1{} free {C:green}Reroll',
                     '{C:inactive}(#1#/2 Rerolls)'
+                },
+            },
+            j_bldstn_rosestonejoker = {
+                name = 'Rosestone',
+                text = {
+                    '{C:green}#2# in #1#{} chance to create a {C:tarot}Tarot',
+                    'card after hand played',
+                    '{C:inactive}(Must have room)',
+                },
+            },
+            j_bldstn_sapphirestonejoker = {
+                name = 'Sapphirestone',
+                text = {
+                    "{C:green}#3# in #2#{} chance for",
+                    "played cards with",
+                    "{C:hearts}Heart{} suit to give",
+                    "{X:chips,C:white} X#1# {} Chips when scored",
+                },
+            },
+            j_bldstn_alwaysluckyjoker = {
+                name = 'Always Lucky',
+                text = {
+                    'All {C:green,E:1,S:1.1}probabilities{} of the card',
+                    'to it\'s right are {C:attention}guaranteed',
+                },
+            },
+            j_bldstn_galaxyjoker = {
+                name = '{C:bldstn_galaxyg1}Galaxy {C:bldstn_galaxyg2}Joker',
+                text = {
+                    'Give me some ideas for what this joker can do',
+                    'in the comments, and the best one will be {C:attention}added!',
+                    '{C:inactive}This joker doesn\'t apear in game.',
+                },
+            },
+            j_bldstn_blackholejoker = {
+                name = '{C:bldstn_blackholeg1}Black{C:bldstn_blackholeg1}Hole {C:bldstn_blackholeg2}Joker',
+                text = {
+                    'Give me some ideas for what this joker can do',
+                    'in the comments, and the best one will be {C:attention}added!',
+                    '{C:inactive}This joker doesn\'t apear in game.',
+                },
+            },
+            j_bldstn_supernovajoker = {
+                name = '{C:bldstn_supernovag1}Supernova {C:bldstn_supernovag2}Joker',
+                text = {
+                    'Give me some ideas for what this joker can do',
+                    'in the comments, and the best one will be {C:attention}added!',
+                    '{C:inactive}This joker doesn\'t apear in game.',
                 },
             },
         },
@@ -196,7 +247,7 @@ return {
                 name = "Utopia",
                 text = {
                     'If used while in a {C:attention}blind{},',
-                    'half the {C:attention}score requirement{}.',
+                    'halve the {C:attention}score requirement{}.',
                     'If used anywhere {C:attention}else{},',
                     'gain {C:money}'.. localize('$') ..'10',
                 }
@@ -221,6 +272,21 @@ return {
                     "adds {C:green}Angel Trait{}.",
                     "{C:inactive}(Only if card doesn\'t",
                     "{C:inactive}have {C:green}Monster Trait{}{C:inactive})",
+                }
+            },
+            c_bldstn_powerspectral = {
+                name = "Power",
+                text = {
+                    "Creates a random",
+                    "{V:1}Power{C:attention} Joker{},",
+                    "sets money to {C:money}$0",
+                }
+            },
+            c_bldstn_voucherspectral = {
+                name = "Voucher+",
+                text = {
+                    "Spawns a random voucher",
+                    "in shop, until next ante",
                 }
             },
         },

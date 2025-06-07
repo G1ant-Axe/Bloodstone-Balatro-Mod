@@ -23,6 +23,9 @@ return {
             bldstn_copycat_text = 'Imitador',
             bldstn_keep_text = 'Guardar',
             bldstn_free_reroll = '+1 Reintento Gratis',
+            bldstn_reactive_text = 'Jokers Reactivos',
+            bldstn_disable_reactive_anim = 'Desactivar Animaciones Reactivas',
+            bldstn_plus_planet = 'Planetas',
         },
     },
     descriptions = {
@@ -97,7 +100,7 @@ return {
             j_bldstn_electricjoker = {
                 name = 'Caja Eléctrica',
                 text = {
-                    '{C:attention}Activo:{} {C:green}1 en #2#{} oportunidad de',
+                    '{C:attention}Activo:{} {C:green}#1# en #2#{} oportunidad de',
                     'generar {V:1}"Plano Súper Cargado"{}',
                     '{C:inactive}(Una vez por tienda)',
                     "\n",
@@ -108,7 +111,7 @@ return {
             j_bldstn_superchargedblueprint = {
                 name = 'Plano Súper Cargado',
                 text = {
-                    '{C:attention}Activo:{} {C:green}1 en #2#{} oportunidad de',
+                    '{C:attention}Activo:{} {C:green}#1# en #2#{} oportunidad de',
                     'generar {V:1}"Caja Eléctrica"{}',
                     '{C:inactive}(Una vez por tienda)',
                     "\n",
@@ -141,14 +144,14 @@ return {
             j_bldstn_lightningstonejoker = {
                 name = 'Piedra Rayo',
                 text = {
-                    'Al final de la ronda {C:green}1 en #2#{}',
+                    'Al final de la ronda {C:green}#3# en #2#{}',
                     'probabilidad de ganar {C:money}'.. localize('$') .. '#1#',
                 },
             },
             j_bldstn_seastonejoker = {
                 name = 'Piedra Marina',
                 text = {
-                    '{C:green}1 en #2#{} de ganar {C:chips}+#1#{} Fichas',
+                    '{C:green}#3# en #2#{} de ganar {C:chips}+#1#{} Fichas',
                     'cuando se anota un {C:clubs}Trébol{}'
                 },
             },
@@ -156,9 +159,57 @@ return {
                 name = 'Piedra Plasma',
                 text = {
                     'Cada {C:attention}2{} Reintentos hay',
-                    'una probabilidad de {C:green}1 en #2#{} de ganar',
+                    'una probabilidad de {C:green}#3# en #2#{} de ganar',
                     '{C:attention}1{} {C:green}Reintento{} gratis',
                     '{C:inactive}(#1#/2 Reintentos)'
+                },
+            },
+            j_bldstn_rosestonejoker = {
+                name = 'Piedra Rosada',
+                text = {
+                    '{C:green}#2# de #1#{} de probabilidad de crear una {C:tarot}Carta del Tarot',
+                    'después de jugar la mano',
+                    '{C:inactive}(Debe haber espacio)',
+                },
+            },
+            j_bldstn_sapphirestonejoker = {
+                name = 'Piedra Zafiro',
+                text = {
+                    "{C:green}#3# de #2#{} de probabilidad de que",
+                    "las cartas jugadas con",
+                    "{C:hearts}Corazones{} otorguen",
+                    "{X:chips,C:white} X#1# {} Fichas al ser puntuadas",
+                },
+            },
+            j_bldstn_alwaysluckyjoker = {
+                name = 'Siempre Suertudo',
+                text = {
+                    'Todas las {C:green,E:1,S:1.1}probabilidades{} de la carta',
+                    'a su derecha están {C:attention}garantizadas',
+                },
+            },
+            j_bldstn_galaxyjoker = {
+                name = '{C:bldstn_galaxyg1}Joker {C:bldstn_galaxyg2}Galaxia',
+                text = {
+                    'Dame algunas ideas sobre qué podría hacer este joker',
+                    'en los comentarios, ¡y la mejor será añadida!',
+                    'Este joker no aparece en el juego.',
+                },
+            },
+            j_bldstn_blackholejoker = {
+                name = '{C:bldstn_blackholeg1}Agujero{C:bldstn_blackholeg1} Negro {C:bldstn_blackholeg2}Joker',
+                text = {
+                    'Dame algunas ideas sobre qué podría hacer este joker',
+                    'en los comentarios, ¡y la mejor será añadida!',
+                    'Este joker no aparece en el juego.',
+                },
+            },
+            j_bldstn_supernovajoker = {
+                name = '{C:bldstn_supernovag1}Joker {C:bldstn_supernovag2}Supernova',
+                text = {
+                    'Dame algunas ideas sobre qué podría hacer este joker',
+                    'en los comentarios, ¡y la mejor será añadida!',
+                    'Este joker no aparece en el juego.',
                 },
             },
         },
@@ -197,7 +248,7 @@ return {
                 name = "Utopía",
                 text = {
                     'Si se usa mientras está en un {C:attention}ciego{},',
-                    'la mitad del {C:attention}requisito de puntuación{}. ',
+                    'reduce a la mitad el {C:attention}requisito de puntaje{}. ',
                     'Si se usa en cualquier otro {C:attention}lugar{},',
                     'gana {C:money}'.. localize('$') ..'10',
                 }
@@ -222,6 +273,20 @@ return {
                     "agrega {C:green}Rasgo Ángel{}. ",
                     "{C:inactive}(Solo si la carta no tiene",
                     "{C:inactive}el {C:green}Rasgo Monstruo{}{C:inactive})",
+                }
+            },
+            c_bldstn_powerspectral = {
+                name = "Poder",
+                text = {
+                    "Crea un {V:1}Joker de Poder{C:attention} aleatorio{},",
+                    "establece el dinero en {C:money}$0",
+                }
+            },
+            c_bldstn_voucherspectral = {
+                name = "Cupón+",
+                text = {
+                    "Genera un cupón aleatorio",
+                    "en la tienda, hasta la siguiente apuesta",
                 }
             },
         },
